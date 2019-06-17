@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>The wall</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .bcontainer {
+            max-width: 70%;
+            margin: auto;
+            padding: 16px;
+        }
+        
+        .topnav {
+            overflow: hidden;
+            background-color: #e9e9e9;
+        }
+        
+        .topnav a {
+            float: left;
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        
+        .topnav a.active {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .topnav .search-container {
+            float: right;
+        }
+        
+        .topnav input[type=text] {
+            padding: 6px;
+            margin-top: 8px;
+            font-size: 17px;
+            border: none;
+        }
+        
+        .topnav .search-container button {
+            float: right;
+            padding: 6px 10px;
+            margin-top: 8px;
+            margin-right: 16px;
+            background: #ddd;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .topnav .search-container button:hover {
+            background: #ccc;
+        }
+        
+        .header {
+            text-align: center;
+        }
+        
+        .register {
+            margin-left: 40%;
+        }
+        
+        input {
+            display: block;
+        }
+        
+        nav {
+            margin-top: -30px;
+        }
+        
+        .box {
+            background-color: #e9e9e9;
+        }
+        
+        .content {
+            border: none;
+            background-color: #e9e9e9;
+            box-sizing: border-box;
+            height: 60px;
+            padding: 10px;
+            border: 1px solid lightgray;
+        }
+        
+        .editprofile {
+            float: right;
+        }
+        
+        @media screen and (max-width: 600px) {
+            .topnav .search-container {
+                float: none;
+            }
+            .topnav a,
+            .topnav input[type=text],
+            .topnav .search-container button {
+                float: none;
+                display: block;
+                text-align: left;
+                width: 100%;
+                margin: 0;
+                padding: 14px;
+            }
+            .topnav input[type=text] {
+                border: 1px solid #ccc;
+                color: black;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="topnav">
+        <a class="active" href="/">Express Yourself</a> {% if user_level.user_level == 9000 %}
+        <a href="/dashboard/admin">Dashboard</a> {% else %}
+        <a href="/dashboard">Dashboard</a> {% endif %}
+        <a href="/login/show/{{ request.session.user_id }}"></i>Profile</a>
+
+        <div class="search-container">
+            <a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log off</a>
+        </div>
+
+    </div>
+
+    <div class="bcontainer">
+        <h2>{{ users.first_name}} {{ users.last_name}} {% if request.session.user_id == users.id %} <a class="editprofile" href="/login/edit/{{ request.session.user_id }}"><button type="button" class="btn btn-primary">Edit Profile</button></a>{% endif %}</h2>
+
+        <p>Registered at: {{ users.created_at }}</p>
+        <p>User ID: #{{ users.id }}</p>
+        <p>Email address: {{ users.email }}</p>
+        <p>Description: {{ users.description }}</p>
+
+        <h3>Leave a message for {{ users.first_name }}</h3><br> {% if messages %} {% for message in messages %}
+        <div class="content">
+            <p>{{ message }}</p>
+        </div><br> {% endfor %} {% endif %}
+        <form action="/process/message" method="POST">
+            {% csrf_token %}
+            <textarea class="box" type="text" name="message" cols="120" rows="3" placeholder="leave a message"></textarea>
+            <input type="hidden" name="user_id" value="{{ users.id }}">
+            <input type="hidden" name="poster_id" value="{{ request.session.user_id }}">
+            <input type="submit" value="Post">
+        </form>
+        {% for user_message in user_messages %}
+        <div class="message">
+            <p><a href="/users/show/{{ user_message.poster.id }}">{{ user_message.poster.first_name }}</a> {{ user_message.created_at|timesince }}</p>
+            <p class="content">{{user_message.content}}</p>
+            <ul>
+                {% for comment in user_message.comments.all %}
+                <li class="comment"><a href="/users/show/{{ comment.poster.id }}">{{comment.poster.first_name}}</a> {{ comment.created_at|timesince }}</li>
+                <div class="content" style: "margin-left: 300px;">
+                    <p>{{ comment.content }}</p>
+                </div><br> {% endfor %}
+                <form action="/process/comment" method="POST" style: "margin-left: 300px;">
+                    {% csrf_token %}
+                    <textarea class="box" name="comment" placeholder="write a message" cols="115" rows="3"></textarea>
+                    <input type="hidden" name="message_id" value="{{ user_message.id }}">
+                    <input type="hidden" name="poster_id" value="{{ request.session.user_id}}">
+                    <input type="hidden" name="user_id" value="{{ users.id }}">
+                    <input type="submit" value="Post">
+                </form>
+            </ul>
+        </div>
+        {% endfor %}
+        <a href="/dashboard">See all users</a>
+    </div>
+
+
+
+
+
+</body>
+
+</html>
