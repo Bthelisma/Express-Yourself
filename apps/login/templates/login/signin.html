@@ -79,6 +79,18 @@
             background: #ccc;
         }
         
+        .square {
+            background-color: #ccc;
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            margin: 10px;
+            padding: 20px;
+        }
+        
         @media screen and (max-width: 600px) {
             .topnav .search-container {
                 float: none;
@@ -123,19 +135,21 @@
         </ul>
         {% endif %}
 
+        <div class="square">
+            <form action="/process/signin" method="POST">
+                {%csrf_token%}
+                <h3>Signin</h3>
+                <br> Email:
+                <br>
+                <input type="email" name="email"><br> Password:
+                <br>
+                <input type="password" name="password"><br><br>
+                <input type="submit" value="Login"><br><br>
 
-        <form action="/process/signin" method="POST">
-            {%csrf_token%}
-            <h3>Signin</h3>
-            <br> Email:
-            <br>
-            <input type="email" name="email"><br> Password:
-            <br>
-            <input type="password" name="password"><br><br>
-            <input type="submit" value="Login"><br><br>
+                <p>Don't have an account yet? Please <a href="/register">Register here</a>.</p>
+            </form>
+        </div>
 
-            <p>Don't have an account yet? Please <a href="/register">Register here</a>.</p>
-        </form>
     </div>
 
 

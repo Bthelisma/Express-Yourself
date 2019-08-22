@@ -110,6 +110,18 @@
             float: right;
         }
         
+        .square {
+            background-color: #ccc;
+            width: 350px;
+            height: 350px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            margin: 10px;
+            padding: 20px;
+        }
+        
         @media screen and (max-width: 600px) {
             .topnav .search-container {
                 float: none;
@@ -135,13 +147,9 @@
 <body>
 
     <div class="topnav">
-        <a class="active" href="/">Express Yourself</a>
+        <a href="/">Express Yourself</a>
         <a href="/dashboard/admin">Dashboard</a>
-        <a href="/users/show/{{ request.session.user_id }}"></i>Profile</a>
-
         <div class="search-container">
-            <a href="/register"><i class="fa fa-fw fa-user"></i>Join Us</a>
-            <a href="/signin"><i class="fa fa-fw fa-user"></i>Sing In</a>
             <a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log off</a>
         </div>
 
@@ -156,19 +164,23 @@
         </ul>
         {% endif %}
 
+        <div class="square">
+            <form action="/process/new" method="POST">
+                {%csrf_token%} First name:<br>
+                <input type="text" name="first"><br> Last name:<br>
+                <input type="text" name="last"><br> Email:
+                <br>
+                <input type="email" name="email"><br> Password:
+                <br>
+                <input type="password" name="password"><br> Comfirm Password:<br>
+                <input type="password" name="confirm_password"><br><br>
+                <input type="submit" value="Create"><br>
 
-        <form action="/process/new" method="POST">
-            {%csrf_token%} First name:<br>
-            <input type="text" name="first"><br> Last name:<br>
-            <input type="text" name="last"><br> Email:
-            <br>
-            <input type="email" name="email"><br> Password:
-            <br>
-            <input type="password" name="password"><br> Comfirm Password:<br>
-            <input type="password" name="confirm_password"><br><br>
-            <input type="submit" value="Create"><br>
+            </form>
+        </div>
 
-        </form>
+
+
     </div>
 
 </body>

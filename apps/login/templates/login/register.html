@@ -77,6 +77,18 @@
             background: #ccc;
         }
         
+        .square {
+            background-color: #ccc;
+            width: 350px;
+            height: 350px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            margin: 10px;
+            padding: 20px;
+        }
+        
         @media screen and (max-width: 600px) {
             .topnav .search-container {
                 float: none;
@@ -121,26 +133,26 @@
         </ul>
         {% endif %}
 
-        <form action="/process/register" method="POST">
-            {%csrf_token%}
+        <div class="square">
+            <form action="/process/register" method="POST">
+                {%csrf_token%}
 
-            <h3>Register</h3>
-            <br> First name:<br>
-            <input type="text" name="first"><br> Last name:<br>
-            <input type="text" name="last"><br> Email:
-            <br>
-            <input type="email" name="email"><br> Password:
-            <br>
-            <input type="password" name="password"><br> Comfirm Password:<br>
-            <input type="password" name="confirm_password"><br><br>
-            <input type="submit" value="Register"><br><br>
-            <p>Already have an account? Please <a href="/signin">Sign In</a>.</p>
+                <h3>Register</h3>
+                <br> First name:<br>
+                <input type="text" name="first"><br> Last name:<br>
+                <input type="text" name="last"><br> Email:
+                <br>
+                <input type="email" name="email"><br> Password:
+                <br>
+                <input type="password" name="password"><br> Comfirm Password:<br>
+                <input type="password" name="confirm_password"><br><br>
+                <input type="submit" value="Register"><br><br>
+                <p>Already have an account? Please <a href="/signin">Sign In</a>.</p>
 
-        </form>
-
-
+            </form>
+        </div>
     </div>
 
-    {</body>
+</body>
 
 </html>
